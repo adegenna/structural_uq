@@ -1,0 +1,77 @@
+\title{Perturbation Theory for Structural UQ}
+
+% \author{
+%         Anthony M. DeGennaro, Associate Computational Scientist, CSI
+% }
+\date{}
+
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amsfonts, bm, bbm, graphicx, caption, subcaption}
+\usepackage{titling}
+\usepackage{lipsum}
+\setlength{\droptitle}{-0.75in}   % Adjust title margin
+%% \pagenumbering{gobble}
+
+\begin{document}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}}
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}}
+\maketitle
+
+\vspace*{-0.75in}
+
+\section{Review: Perturbation Theory}
+
+The goal is to help mitigate the problem of structural UQ by using perturbation theory. 
+We review the basics of perturbation theory here~\cite{khalil}.
+Consider the equation:
+
+\begin{equation}
+        \label{eq:dynsys}
+        \begin{aligned}
+                \dot{u} &= f( u , t , \epsilon )  \\
+                u &\in U \subset \mathbb{R}^n \;\;\; , \;\;\; t \in [t_0,t_f] \;\;\; , \;\;\; \epsilon \in [-\epsilon_0 , \epsilon_0].
+        \end{aligned}
+\end{equation}
+
+\noindent Assume our initial conditions depend smoothly and deterministically on $\epsilon$:
+
+\begin{equation}
+        \label{eq:ics}
+        u(t_0) = \eta(\epsilon) \;\;\; .
+\end{equation}
+
+\noindent Assume also that we have an unperturbed solution $u_0(t) = u(t,0)$.
+
+\noindent Our goal is to quantify Eq.~\ref{eq:dynsys} over the distribution $\epsilon \sim \rho(\epsilon)$. 
+The naive route is Monte Carlo sampling. 
+However, one use of perturbation theory is to avoid this through separation of variables: we posit this expansion for the solution:
+
+\begin{equation}
+        \label{eq:expansion}
+        u( t , \epsilon ) \approx \sum_{k=0}^{N-1} u_k(t) \epsilon^k \;\;\; .
+\end{equation}
+
+\noindent The fields $u_j(t)$ must be solved for through a system of ODEs obtained by substituting Eq.~\ref{eq:expansion} into Eq.~\ref{eq:dynsys} and matching terms in $\epsilon$:
+
+\begin{equation}
+        \label{eq:perteq}
+        \begin{aligned}
+                \dot{u}_0 &= f( t , u , 0 ) \\
+                \dot{u}_k &= A(t) u_k + g_k( t , u_0(t) , \dots , u_{k-1}(t) ) \;\;\; ,
+        \end{aligned}
+\end{equation}
+
+\noindent where $A(t) = [ \partial f / \partial u ]$ evaluated at $u_0(t)$.
+
+\noindent The advantage for UQ is, we need only solve Eq.~\ref{eq:perteq} {\it once}. 
+Then, we simply evaluate Eq.~\ref{eq:expansion} for any value of $\epsilon$ we like.
+
+\section*{}
+%\vspace*{-0.75in}
+\newpage
+\bibliographystyle{plain}
+\bibliography{notes.bib}
+
+
+\end{document}
