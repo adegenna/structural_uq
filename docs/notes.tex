@@ -77,10 +77,41 @@ Consider this example:
         \begin{aligned}
                 \dot{u}_1 &= u_2 \\
                 \dot{u}_2 &= -u_1 + \epsilon ( 1 - u_1^2 ) u_2 \\
-                \epsilon &\sim \mathcal{U}(-0.1,0.1) \\
-                (u_1,u_2) &\sim \mathcal{U}(-5,5) \;\;\; .
+                \epsilon &\sim \mathcal{U}(-1,1) \\
+                (u_1,u_2) &\sim \mathcal{U}(-2,2) \\
+                t &\in [0,0.25] \;\;\; .
         \end{aligned}
 \end{equation}
+
+\noindent Fig.~\ref{fig:vdp_variations} plots the variations possible in this system with $\epsilon$.
+In particular, we see the development of a nonlinear global attractor with increasing $\epsilon$.
+
+\begin{figure}[h]
+        \centering
+        \begin{subfigure}{0.24\textwidth}
+        \centering
+                \includegraphics[width=0.95\linewidth]{vdp_0.png}
+                \caption{$\epsilon = 0$.}
+        \end{subfigure}
+        \begin{subfigure}{0.24\textwidth}
+        \centering
+                \includegraphics[width=0.95\linewidth]{vdp_0p25.png}
+                \caption{$\epsilon = 0.25$.}
+        \end{subfigure}
+        \begin{subfigure}{0.24\textwidth}
+        \centering
+                \includegraphics[width=0.95\linewidth]{vdp_0p5.png}
+                \caption{$\epsilon = 0.5$.}
+        \end{subfigure}
+        \begin{subfigure}{0.24\textwidth}
+        \centering
+                \includegraphics[width=0.95\linewidth]{vdp_1.png}
+                \caption{$\epsilon = 1$.}
+        \end{subfigure}                        
+        \caption{Van der Pol equations for different values of $\epsilon$.}
+        \label{fig:vdp_variations}
+\end{figure}
+
 
 \noindent We seek a perturbation expansion to approximate solution variation in $\epsilon$:
 
@@ -123,6 +154,16 @@ Matching terms of $\mathcal{O}(\epsilon)$ gives the first-order approximate syst
         \end{aligned}
 \end{equation}
 
+\noindent Fig.~\ref{fig:vdp_vs_approx} shows the performance of the 2$^{\text{nd}}$-order approximate system against the full Van der Pol equations for $\epsilon=1$.
+We again emphasize the independence of our approximate constructions from $\epsilon$: the fields $u_{jk}$ are obtained by solving one set of ODEs once, and then sampling over $\epsilon$ reduces to simple evaluation of Eq.~\ref{eq:vdp_exp}.
+By contrast, naive sampling would involve solving a new system of ODEs for each and every value of $\epsilon$.
+
+\begin{figure}[h]
+        \centering
+        \includegraphics[width=0.6\textwidth]{vdp_vs_approx_eps1.png}
+        \caption{Comparison of Van der Pol (black), 0$^{\text{th}}$-order (blue), and 2$^{\text{nd}}$-order (red) approximate systems for $\epsilon=1$.}
+        \label{fig:vdp_vs_approx}
+\end{figure}
 
 
 
