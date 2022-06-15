@@ -34,14 +34,12 @@ Consider the equation:
         \end{aligned}
 \end{equation}
 
-\noindent Assume our initial conditions depend smoothly and deterministically on $\epsilon$:
+\noindent We also allow for our initial conditions to depend smoothly on $\epsilon$:
 
 \begin{equation}
         \label{eq:ics}
         u(t_0) = \eta(\epsilon) \;\;\; .
 \end{equation}
-
-\noindent Assume also that we have an unperturbed solution $u_0(t) = u(t,0)$.
 
 \noindent Our goal is to quantify Eq.~\ref{eq:dynsys} over the distribution $\epsilon \sim \rho(\epsilon)$. 
 The naive route is Monte Carlo sampling. 
@@ -49,7 +47,10 @@ However, one use of perturbation theory is to avoid this through separation of v
 
 \begin{equation}
         \label{eq:expansion}
-        u( t , \epsilon ) \approx \sum_{k=0}^{N-1} u_k(t) \epsilon^k \;\;\; .
+        \begin{aligned}
+                u( t , \epsilon ) &\approx \sum_{k=0}^{N-1} u_k(t) \epsilon^k \\
+                \eta( \epsilon ) &\approx \sum_{k=0}^{N-1} \eta_k \epsilon^k \;\;\; .
+        \end{aligned}
 \end{equation}
 
 \noindent The fields $u_j(t)$ must be solved for through a system of ODEs obtained by substituting Eq.~\ref{eq:expansion} into Eq.~\ref{eq:dynsys} and matching terms in $\epsilon$:
@@ -57,8 +58,8 @@ However, one use of perturbation theory is to avoid this through separation of v
 \begin{equation}
         \label{eq:perteq}
         \begin{aligned}
-                \dot{u}_0 &= f( t , u , 0 ) \\
-                \dot{u}_k &= A(t) u_k + g_k( t , u_0(t) , \dots , u_{k-1}(t) ) \;\;\; ,
+                \dot{u}_0 &= f( t , u , 0 ) \;\;\; , \;\;\; u_0(t_0) = \eta_0 \\
+                \dot{u}_k &= A(t) u_k + g_k( t , u_0(t) , \dots , u_{k-1}(t) ) \;\;\; , \;\;\; u_k(t_0) = \eta_k  \;\;\; ,
         \end{aligned}
 \end{equation}
 
@@ -66,6 +67,64 @@ However, one use of perturbation theory is to avoid this through separation of v
 
 \noindent The advantage for UQ is, we need only solve Eq.~\ref{eq:perteq} {\it once}. 
 Then, we simply evaluate Eq.~\ref{eq:expansion} for any value of $\epsilon$ we like.
+
+\section{Example: Van der Pol}
+
+Consider this example:
+
+\begin{equation}
+        \label{eq:vdp}
+        \begin{aligned}
+                \dot{u}_1 &= u_2 \\
+                \dot{u}_2 &= -u_1 + \epsilon ( 1 - u_1^2 ) u_2 \\
+                \epsilon &\sim \mathcal{U}(-0.1,0.1) \\
+                (u_1,u_2) &\sim \mathcal{U}(-5,5) \;\;\; .
+        \end{aligned}
+\end{equation}
+
+\noindent We seek a perturbation expansion to approximate solution variation in $\epsilon$:
+
+\begin{equation}
+        \label{eq:vdp_exp}
+        \begin{aligned}
+                u_j &= u_{j0} + \epsilon u_{j1} + \epsilon^2 u_{j2}^2 \\
+                \eta_j &= \eta_{j0} + \epsilon \eta_{j1} + \epsilon^2 \eta_{j2}^2 \;\;\; .
+        \end{aligned}
+\end{equation}
+
+\noindent Substituting Eq.~\ref{eq:vdp_exp} into Eq.~\ref{eq:vdp} and matching $\mathcal{O}(1)$ terms gives the zeroth-order approximate system:
+
+\begin{equation}
+        \label{eq:zeroorder_vdp}
+        \begin{aligned}
+                \dot{u}_{10} &= u_{20} \;\;\; , \;\;\; u_{10} = u_1(t_0) \\
+                \dot{u}_{20} &= -u_{10} \;\;\; , \;\;\; u_{20} = u_2(t_0) \;\;\; ,
+        \end{aligned}
+\end{equation}
+
+\noindent which is the unperturbed ($\epsilon=0$) system.
+Matching terms of $\mathcal{O}(\epsilon)$ gives the first-order approximate system:
+
+\begin{equation}
+        \label{eq:firstorder_vdp}
+        \begin{aligned}
+                \dot{u}_{11} &= u_{21} \;\;\; , \;\;\; u_{11} = 0 \\
+                \dot{u}_{21} &= -u_{11} + ( 1 - u_{10}^2 ) u_{20} \;\;\; , \;\;\; u_{21} = 0 \;\;\; .
+        \end{aligned}
+\end{equation}
+
+\noindent Likewise, $\mathcal{O}(\epsilon^2)$ gives:
+
+\begin{equation}
+        \label{eq:secondorder_vdp}
+        \begin{aligned}
+                \dot{u}_{12} &= u_{22} \;\;\; , \;\;\; u_{12} = 0 \\
+                \dot{u}_{22} &= -u_{12} + ( 1 - u_{10}^2 ) u_{21} - 2 u_{10} u_{11} u_{20} \;\;\; , \;\;\; u_{22} = 0 \;\;\; .
+        \end{aligned}
+\end{equation}
+
+
+
 
 \section*{}
 %\vspace*{-0.75in}
